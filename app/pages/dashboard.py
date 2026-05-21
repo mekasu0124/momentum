@@ -213,7 +213,7 @@ class Dashboard(QWidget):
 		)
 		
 		self.new_task_edit.clear()
-		self.load_timer.start()
+		self.start_worker()
 
 	def error(self, error):
 		handle_error_success(
