@@ -1,177 +1,284 @@
-from PySide6.QtWidgets import QMessageBox
-from typing import Tuple, List, Union
 from pathlib import Path
-from uuid import UUID
+from typing import Tuple, Union, List, Dict, Any
+from uuid import UUID, uuid4
 
-from .database.db import get_db, get_engine, get_base
-from .models.task import Task
-
+import tomllib
 import json
-import os
 import sys
+import os
+
+from .database.db import get_base, get_engine, get_db
+from .models.task import Task
 
 
 class Logic:
-	def __init__(self, app_dir: Path):
-		self.app_dir = app_dir
-		self.config_file = f"{app_dir}/config.json"
-		self.setup_environment()
-		self.db = None
-		
-	def get_db_session(self):
-		if not self.db:
-			self.db = next(get_db())
-			
-		return self.db
-		
-	def close_db_session(self):
-		if self.db:
-			self.db.close()
-			self.db = None
-			
-	def setup_environment(self):
-		try:
-			with open(self.config_file, 'r', encoding="utf-8-sig") as f:
-				data = json.load(f)
-				
-			if data.get("agree") != 1:
-				self.get_user_agreement()
-				self.init_db()
-		
-		except FileNotFoundError:
-			self.get_user_agreement()
-			self.init_db()
-			
-		except (KeyError, json.JSONDecodeError):
-			if Path(self.config_file).exists():
-				os.remove(self.config_file)
-				
-			self.get_user_agreement()
-			self.init_db()
-			
-	def update_user_config(self):
-		try:
-			Path(self.app_dir).mkdir(parents=True, exist_ok=True)
-			
-			with open(self.config_file, 'w', encoding="utf-8-sig") as new:
-				json.dump({"agree": 1}, new, indent=2)
+    def __init__(self, app_dir):
+        self.app_dir = app_dir
+        self.config_file = Path(f"{self.app_dir}/momentum/config.json")
+        self.init_environment()
 
-			self.init_db()
-				
-		except PermissionError:
-			QMessageBox.warning(
-				None,
-				"Momentum - Invalid Permissions",
-				(
-					"Momentum failed to created the applications needed directory "
-					"due to permission issues."
-				)
-			)
-			sys.exit()
-			
-	def get_user_agreement(self):
-		response = QMessageBox.question(
-			None,
-			"Momentum - Read/Write Permissions",
-			(
-				"Momentum requires read/write permissions to create and "
-				"maintain the database that holds your entries. This "
-				"application cannot run without this permission."
-			),
-			QMessageBox.Yes | QMessageBox.No,
-			QMessageBox.Yes
-		)
-		
-		if response == QMessageBox.No:
-			QMessageBox.warning(
-				None,
-				"Momentum - Read/Write Permissions Denied",
-				(
-					"\nYou declined the user agreement. This application "
-					"cannot run without this permission. If you change your mind later, "
-					"run any command again."
-				)
-			)
-			sys.exit()
-		
-		else:
-			self.update_user_config()
-			
-	def init_db(self):
-		get_base().metadata.create_all(bind=get_engine())
+    def init_environment(self):
+        if not self.config_file.exists():
+            self.get_user_agreement()
 
-	def get_all_tasks(self) -> Union[List[Task], None]:
-		db = self.get_db_session()
+        else:
+            self.check_user_agreement()
 
-		try:
-			all_tasks = db.query(Task).all()
+    def check_user_agreement(self):
+        try:
+            with open(self.config_file, 'r', encoding="utf-8-sig") as f:
+                data = json.load(f)
 
-			if not all_tasks or len(all_tasks) == 0:
-				return []
-			
-			return all_tasks
-		
-		except Exception as e:
-			print(f"Unknown Error Querying All Tasks:\n{e}")
-			return None
-		
-		finally:
-			db.close()
+            if not data.get("rw_perms") == 1:
+                self.get_user_agreement()
 
-	def save_task(self, task_data) -> Tuple[bool, str]:
-		if not task_data:
-			return True, "New Task Data Cannot Be Empty"
-		
-		db = self.get_db_session()
+            else:
+                self.init_db()
 
-		try:
-			found_task = (
-				db
-				.query(Task)
-				.filter(Task.content == task_data)
-				.first()
-			)
+        except FileNotFoundError:
+            print(f"File Not Found: '{self.config_file}'")
+            self.get_user_agreement()
 
-			if found_task:
-				return True, "Task Already Exists"
-			
-			new_task = Task(content=task_data)
+        except (KeyError, json.JSONDecodeError):
+            print(f"Config File is Corrupt. Deleteing and re-creating... Please Wait...")
 
-			db.add(new_task)
-			db.commit()
-			return False, "Task Saved Successfully"
-		
-		except Exception as e:
-			print(f"Unknown Exception Saving Task:\n{e}")
-			return True, "Failed to Save Task"
-		
-		finally:
-			db.close()
+            if self.config_file.exists():
+                os.remove(self.config_file)
 
-	def delete_task(self, task_id) -> Tuple[bool, str]:
-		if not task_id:
-			return True, "Task ID Cannot Be Empty or Null!"
-		
-		db = self.get_db_session()
+            self.get_user_agreement()
 
-		try:
-			found_task = (
-				db
-				.query(Task)
-				.filter(Task.id == task_id)
-				.first()
-			)
+        except Exception as e:
+            print(f"Unknown Exception Reading System Config:\n{e}")
+            sys.exit(1)
 
-			if not found_task:
-				return True, f"No Task Found By ID: {task_id}"
-			
-			db.delete(found_task)
-			db.commit()
-			return False, "Task Deleted Successfully"
-		
-		except Exception as e:
-			print(f"Unknown Exception Deleting Task:\n{e}")
-			return True, "Failed to Delete Task"
-		
-		finally:
-			db.close()
+    def get_user_agreement(self):
+        prompt = (
+            "Momentum requires permissions to read/write to its "
+            "own database and update its files when an update "
+            "comes available. This application cannot run without "
+            "these permissions.\n\nDo you agree to allow this application "
+            "to have read/write permissions to its own database file and code "
+            "base?\n\nDo You Agree? (Y/N): "
+        )
+        valid_options = ['Y', 'N', 'y', 'n']
+
+        user_agree = input(prompt)
+
+        while not user_agree in valid_options:
+            print("\nInvalid Input. 'Y' for Yes or 'N' for No\n\n")
+
+            user_agree = input(prompt)
+
+            if user_agree in valid_options:
+                break
+
+        if user_agree.lower() == 'n':
+            print(
+                "You denied the read/write permissions for this "
+                "application. If you change your mind in the future, "
+                "run this command again."
+            )
+            sys.exit(0)
+
+        else:
+            self.update_user_config()
+
+    def update_user_config(self):
+        momentum_dir = self.config_file.parent
+
+        if not momentum_dir.exists():
+            momentum_dir.mkdir(parents=True, exist_ok=True)
+
+        try:
+            with open(self.config_file, 'r', encoding="utf-8-sig") as f:
+                data = json.load(f)
+
+            data["rw_perms"] = 1
+
+            with open(self.config_file, 'w+', encoding="utf-8-sig") as new:
+                json.dump(data, new, indent=2)
+
+            self.init_db()
+
+        except FileNotFoundError:
+            print("config file not found. creating new config file... please wait...")
+            try:
+                with open(self.config_file, 'w+', encoding="utf-8-sig") as new:
+                    json.dump({"rw_perms": 1}, new, indent=2)
+
+                self.init_db()
+
+            except Exception as e:
+                print(f"Unknown Exception Creating Config File:\n{e}")
+                sys.exit(1)
+
+        except (KeyError, json.JSONDecodeError):
+            print('Config File is Corrupt. Deleting and re-creating... please wait...')
+
+            if self.config_file.exists():
+                os.remove(self.config_file)
+
+            with open(self.config_file, 'w+', encoding="utf-8-sig") as new:
+                json.dump({"rw_perms": 1}, new, indent=2)
+
+            self.init_db()
+
+        except Exception as e:
+            print(f"Unknown Exception Updating User Config:\n{e}")
+            sys.exit(1)
+
+    def init_db(self):
+        get_base().metadata.create_all(
+            bind=get_engine()
+        )
+
+    def get_pyproject_data(self):
+        pyproject_path = Path(__file__).parent.parent / "pyproject.toml"
+        
+        with open(pyproject_path, 'rb') as project:
+            proj_data = tomllib.load(project)
+
+        if not "project" in proj_data:
+            return {}
+
+        my_dict = {
+            "project": {},
+            "urls": {},
+            "scripts": {}
+        }
+        
+        project_data = proj_data["project"]
+
+        for key, value in project_data.items():
+            if key == "urls":
+                for k, v in project_data["urls"].items():
+                    my_dict["urls"][k] = v
+
+            if key == "scripts":
+                for j, u in project_data["scripts"].items():
+                    my_dict["scripts"][j] = u
+
+            if key != "urls" and key != "scripts":
+                my_dict["project"][key] = value
+
+        return my_dict
+    
+    def add_task(self, new_task: str) -> str:
+        db = next(get_db())
+
+        try:
+            found_task = (
+                db
+                .query(Task)
+                .filter(Task.task == new_task)
+                .first()
+            )
+
+            if found_task:
+                return "Task Already Exists"
+            
+            task_to_save = Task(task=new_task)
+
+            db.add(task_to_save)
+            db.commit()
+            return "Task Saved Successfully"
+        
+        except Exception as e:
+            print(f"Unknown Exception Saving New Task:\n{e}")
+            db.rollback()
+            return "Failed to Save Task"
+        
+    def edit_task(self, task_id: str, updated_task: str, is_completed: bool = False) -> str:
+        db = next(get_db())
+
+        try:
+            try:
+                task_uuid = UUID(task_id)
+            except ValueError:
+                return f"Invalid UUID Format: {task_id}"
+            
+            found_task = (
+                db
+                .query(Task)
+                .filter(Task.id == task_uuid)
+                .first()
+            )
+
+            if not found_task:
+                return f"No Task Found By ID: {task_id}"
+            
+            found_task.task = updated_task
+
+            if is_completed:
+                found_task.is_completed = True
+
+            db.commit()
+            db.refresh(found_task)
+            return "Task Updated Successfully"
+        
+        except Exception as e:
+            print(f"Unknown Exception Updating Task:\n{e}")
+            db.rollback()
+            return "Failed to Updated Task"
+
+    def delete_task(self, task_id: UUID) -> str:
+        db = next(get_db())
+
+        try:
+            try:
+                task_uuid = UUID(task_id)
+            except ValueError:
+                return f"Invalid UUID Format: {task_id}"
+            
+            found_task = (
+                db
+                .query(Task)
+                .filter(Task.id == task_uuid)
+                .first()
+            )
+
+            if not found_task:
+                return f"No Task Found By ID: {task_id}"
+            
+            db.delete(found_task)
+            db.commit()
+            return "Task Deleted Successfully"
+        
+        except Exception as e:
+            print(f'Unknown Exception Deleting Task:\n{e}')
+            db.rollback()
+            return "Failed to Delete Task"
+
+    def list_tasks(self) -> Dict[str, Any]:
+        db = next(get_db())
+
+        try:
+            return db.query(Task).all()
+        
+        except Exception as e:
+            print(f"Unknown Exception Querying All Tasks:\n{e}")
+            db.rollback()
+            return []
+
+    def list_task_by_id(self, task_id: str) -> Union[Dict[str, str], None]:
+        db = next(get_db())
+
+        try:
+            try:
+                task_uuid = UUID(task_id)
+            except ValueError:
+                return f"Invalid UUID Format: {task_id}"
+            
+            found_task = (
+                db
+                .query(Task)
+                .filter(Task.id == task_uuid)
+                .first()
+            )
+
+            return found_task
+        
+        except Exception as e:
+            print(f"Unknown Exception Querying Single Task:\n{e}")
+            db.rollback()
+            return None
