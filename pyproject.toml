@@ -5,18 +5,16 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "momentum"
 version = "1.0.0"
-description = "A PySide6 application for task tracking efficiency"
+description = "Momentum is a task management application that comes with a cli tool plus a console, desktop, mobile, and web application partners. All that share the same core logic. 🙂"
 readme = "README.md"
 requires-python = ">=3.12"
 authors = [
-	{ name = "mekasu0124", email = "mek0124@proton.me" },
+    {name = "mekasu0124", email = "mek0124@proton.me"},
 ]
 license = "MIT"
 dependencies = [
-	"sqlalchemy>=2.0.0",
-	"pyside6>=6.10.2",
-	"pyside6-fluent-widgets>=1.11.1",
-	"python-dotenv>=1.2.2"
+  "click==8.4.1",
+  "sqlalchemy==2.0.50"
 ]
 
 [project.urls]
@@ -25,10 +23,10 @@ Repository = "https://github.com/mek0124/momentum.git"
 Documentation = "https://github.com/mek0124/momentum"
 
 [project.scripts]
-momentum = "app.app:main"
+momentum = "apps.cli.cli:cli"
 
 [tool.setuptools]
-packages = ["app", "core"]
+packages = ["apps", "core"]
 
 [tool.setuptools.package-data]
 "*" = ["*.py", "assets/*"]
