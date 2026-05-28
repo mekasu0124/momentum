@@ -8,7 +8,7 @@ from ..utils.formats import (
 
 
 @click.command("hello")
-@click.option("--user", default="User", help="the user to greet")
+@click.option("--user", type=str, default="User", help="the user to greet")
 @click.pass_context
 def hello_command(ctx: click.Context, user: str) -> None:
     """

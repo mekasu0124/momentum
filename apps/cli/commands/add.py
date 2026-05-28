@@ -2,7 +2,7 @@ import click
 
 
 @click.command("add")
-@click.argument("task")
+@click.argument("task", type=str)
 @click.pass_context
 def add_command(ctx: click.Context, task: str) -> None:
     """
@@ -15,22 +15,24 @@ def add_command(ctx: click.Context, task: str) -> None:
     Returns:
         - None
     """
-
-    if not task:
-        click.echo("Task cannot be empty")
-        return
     
     logic = ctx.obj["logic"]
-    response = logic.add_task(task)
-    click.echo(response)
-    all_tasks = logic.list_tasks()
+    success, task, response = logic.task_logic.add_task(task)
 
-    for task in all_tasks:
-        click.echo(
-            f"{'-'*30}\n"
-            f"ID: {task.id}\n"
-            f"Task: {task.task}\n"
-            f"Completed: {task.is_completed}\n"
-            f"Created: {task.created_at}\n"
-            f"{'-'*30}"
-        )
+    if task is None:
+        return click.echo("Task Cannot Be Empty")
+
+    if not success:
+        return click.echo(response)
+    
+    click.echo(
+        f"""\n{response}
+
+{'-'*30}
+ID: {task.id}
+Task: {task.task}
+Completed: {task.is_completed}
+Created: {task.created_at.__format__('%m/%d/%Y %H:%M:%S')}
+{'-'*30}
+"""
+    )

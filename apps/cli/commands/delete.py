@@ -17,16 +17,9 @@ def delete_command(ctx: click.Context, task_id: str) -> None:
     """
 
     logic = ctx.obj["logic"]
-    response = logic.delete_task(task_id)
-    click.echo(response)
-    all_tasks = logic.list_tasks()
+    success, response = logic.task_logic.delete_task(task_id)
 
-    for task in all_tasks:
-        click.echo(
-            f"{'-'*30}\n"
-            f"ID: {task.id}\n"
-            f"Task: {task.task}\n"
-            f"Completed: {task.is_completed}\n"
-            f"Created: {task.created_at}\n"
-            f"{'-'*30}"
-        )
+    if not success:
+        return click.echo(response)
+    
+    click.echo(response)
