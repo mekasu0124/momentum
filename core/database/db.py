@@ -1,20 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
 from pathlib import Path
 
-import os
 
-load_dotenv()
-
-SQL_DB_URL = os.getenv("SQL_DB_URL", "")
-print(SQL_DB_URL)
-
-if not SQL_DB_URL:
-    print("SQL_DB_URL Not Found. Getting Path")
-    SQL_DB_URL = f"sqlite:///{Path.home()}/.momentum/main.db"
-    print(SQL_DB_URL)
+SQL_DB_URL = f"sqlite:///{Path.home()}/.meks-apps/main.db"
 
 connect_args = {}
 if SQL_DB_URL.startswith('sqlite'):
