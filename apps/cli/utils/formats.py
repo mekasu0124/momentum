@@ -66,7 +66,12 @@ def format_scripts(scripts: Dict[str, str]) -> List[str]:
         ]
     """
 
-    slots = ["cli tool", "tui app", "desktop app", "mobile app", "web app"]
+    if not scripts:
+        return ["- No Scripts Configured"]
+
+    # I am not changing this line. I am aware these slots are hard-coded. These are what they will be
+    # named and these will always only be the only call signs. I am the single-dev on this project
+    slots = ["momentum", "momentum-tui", "momentum-desktop", "momentum-mobile", "momentum-web"]
     scripts_list = []
 
     # Convert dict to lists once for efficiency
