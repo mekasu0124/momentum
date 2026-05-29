@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import click
 
 from .commands.hello import hello_command
@@ -16,9 +14,8 @@ from core.logic import Logic
 def cli(ctx):
     """Entry Point for CLI Application"""
     
-    app_dir = Path.home() / ".meks-apps"
     ctx.ensure_object(dict)
-    ctx.obj['logic'] = Logic(app_dir)
+    ctx.obj['logic'] = Logic()
 
 
 cli.add_command(hello_command)
