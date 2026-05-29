@@ -43,6 +43,12 @@ class Task(Base):
         default = lambda: datetime.now()
     )
 
+    updated_at = Column(
+        DateTime,
+        index = True,
+        onupdate = lambda: datetime.now()
+    )
+
     def to_dict(self):
         return {
             "id": self.id,
