@@ -10,8 +10,7 @@ from .logic_parts.task import TaskLogic
 
 
 class Logic:
-    def __init__(self, app_dir):
-        self.app_dir = Path(app_dir)
+    def __init__(self):
         self.config = Config
         self.config_file = self.config.CONFIG_PATH
         self.logger = self.configure_logger()
