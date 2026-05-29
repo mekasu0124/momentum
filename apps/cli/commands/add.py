@@ -17,22 +17,19 @@ def add_command(ctx: click.Context, task: str) -> None:
     """
     
     logic = ctx.obj["logic"]
-    success, task, response = logic.task_logic.add_task(task)
+    success, task_response, response = logic.task_logic.add_task(task)
 
-    if task is None:
-        return click.echo("Task Cannot Be Empty")
-
-    if not success:
+    if task_response is None or not success:
         return click.echo(response)
     
     click.echo(
         f"""\n{response}
 
 {'-'*30}
-ID: {task.id}
-Task: {task.task}
-Completed: {task.is_completed}
-Created: {task.created_at.__format__('%m/%d/%Y %H:%M:%S')}
+ID: {task_response.id}
+Task: {task_response.task}
+Completed: {task_response.is_completed}
+Created: {task_response.created_at.__format__('%m/%d/%Y %H:%M:%S')}
 {'-'*30}
 """
     )
