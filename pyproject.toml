@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "momentum"
 version = "1.0.0"
-description = "Momentum is a task management application that comes with a cli tool plus a console, desktop, mobile, and web application partners. All that share the same core logic. 🙂"
+description = "A GUI for journaling"
 readme = "README.md"
 requires-python = ">=3.12"
 authors = [
@@ -13,12 +13,8 @@ authors = [
 ]
 license = "MIT"
 dependencies = [
-  "click==8.4.1",
-  "pydantic==2.13.4",
-  "pytest==9.0.3",
-  "pytest-cov==7.1.0",
-  "pytest-asyncio==1.4.0",
-  "sqlalchemy==2.0.50"
+    "pydantic>=2.13.4",
+    "pyside6>=6.11.1",
 ]
 
 [project.urls]
@@ -27,10 +23,10 @@ Repository = "https://github.com/mek0124/momentum.git"
 Documentation = "https://github.com/mek0124/momentum"
 
 [project.scripts]
-momentum = "apps.cli.cli:cli"
+momentum = "src.main:main"
 
 [tool.setuptools]
-packages = ["apps", "core"]
+packages = ["src"]
 
 [tool.setuptools.package-data]
 "*" = ["*.py", "assets/*"]
