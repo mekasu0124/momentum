@@ -14,7 +14,6 @@ authors = [
 license = "MIT"
 dependencies = [
     "build>=1.5.0",
-    "pydantic>=2.13.4",
     "pyside6>=6.11.1",
     "setuptools>=82.0.1",
     "wheel>=0.47.0",
