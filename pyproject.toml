@@ -15,6 +15,9 @@ license = "MIT"
 dependencies = [
     "build>=1.5.0",
     "pyside6>=6.11.1",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "pytest-cov>=7.1.0",
     "setuptools>=82.0.1",
     "wheel>=0.47.0",
 ]
