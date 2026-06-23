@@ -60,7 +60,7 @@ def run_main(app, app_dir):
 
 def main():
     app = QApplication(sys.argv)
-    app_dir = Path.home() / ".momentum"
+    app_dir = Path.home() ".meks-apps" / ".momentum"
     config = Config(app_dir)
 
     user_agreed = config.check_user_agreement()
