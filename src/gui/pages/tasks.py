@@ -2,6 +2,7 @@ from PySide6.QtWidgets import (
     QWidget,
     QVBoxLayout,
     QHBoxLayout,
+    QGridLayout,
     QLabel,
     QPushButton,
     QStatusBar,
@@ -10,6 +11,8 @@ from PySide6.QtWidgets import (
     QTextEdit
 )
 from PySide6.QtCore import Qt, QTimer
+from PySide6.QtGui import QTextOption
+from qfluentwidgets import FluentIcon as fi
 
 
 class Tasks(QWidget):
@@ -187,6 +190,84 @@ class Tasks(QWidget):
 
             return self.handle_error_success("tasks loaded", False)
 
+        for task in result:
+            card = QWidget()
+            card.setObjectName("task-card")
+            card.setFixedHeight(150)
+
+            card_layout = QGridLayout(card)
+            card_layout.setContentsMargins(10, 10, 10, 10)
+            card_layout.setSpacing(5)
+
+            card_title = QLabel(task.title)
+            card_title.setObjectName("card-title")
+            card_title.setAlignment(
+                Qt.AlignmentFlag.AlignLeft
+            )
+            card_title.setScaledContents(True)
+
+            created_at = QLabel(task.created_at)
+            created_at.setObjectName("card-details")
+            created_at.setAlignment(
+                Qt.AlignmentFlag.AlignCenter
+            )
+
+            edit_btn = QPushButton(
+                parent = None,
+                text = "",
+                icon = fi.EDIT.icon(color="#F2C94C")
+            )
+            edit_btn.setObjectName("task-btn")
+            edit_btn.setFixedSize(70, 30)
+            edit_btn.clicked.connect(
+                lambda checked=False, t=task: self.edit_task(t)
+            )
+
+            del_btn = QPushButton(
+                parent = None,
+                text = "",
+                icon = fi.DELETE.icon(color="#E85D5D")
+            )
+            del_btn.setObjectName("task-btn")
+            del_btn.setFixedSize(70, 30)
+            del_btn.clicked.connect(
+                lambda checked=False, t=task: self.delete_task(t)
+            )
+
+            content_text = QTextEdit()
+            content_text.setObjectName("card-content")
+            content_text.setPlainText(task.content)
+            content_text.setWordWrapMode(
+                QTextOption.WrapMode.WordWrap
+            )
+            content_text.setReadOnly(True)
+            content_text.setMaximumHeight(150)
+            content_text.setVerticalScrollBarPolicy(
+                Qt.ScrollBarPolicy.ScrollBarAsNeeded
+            )
+
+            card_layout.addWidget(card_title, 0, 0, 1, 1)
+            card_layout.addWidget(created_at, 0, 1, 1, 1)
+            card_layout.addWidget(edit_btn, 0, 2, 1, 1)
+            card_layout.addWidget(del_btn, 0, 3, 1, 1)
+            card_layout.addWidget(content_text, 1, 0, 1, 4)
+
+            card_layout.setColumnStretch(0, 3)
+            card_layout.setColumnStretch(1, 1)
+            card_layout.setColumnStretch(2, 0)
+            card_layout.setColumnStretch(3, 0)
+
+            card_layout.setRowStretch(0, 0)
+            card_layout.setRowStretch(1, 1)
+
+            self.scroll_layout.addWidget(card)
+
+        self.scroll_layout.setAlignment(
+            Qt.AlignmentFlag.AlignTop
+        )
+
+        self.handle_error_success("tasks loaded successfully", False)
+
     def update_title_state(self, value):
         self.task_data["title"] = value
 
@@ -215,8 +296,37 @@ class Tasks(QWidget):
             return self.handle_error_success(response, did_save)
 
         self.handle_error_success(response, did_save)
-        self.load_tasks()
+        QTimer.singleShot(1500, self.load_tasks)
 
     def task_save_error(self, error):
         _, error = error
         self.handle_error_success(error, True)
+
+    def edit_task(self, task):
+        pass
+
+    def delete_task(self, task):
+        worker = self.async_helper.run_async(
+            self.logic.task_crud.delete_task,
+            task.id
+        )
+
+        worker.signals.started.connect(
+            lambda: self.handle_error_success("deleting task", None)
+        )
+        worker.signals.finished.connect(self.task_deleted)
+        worker.signals.error.connect(self.task_delete_error)
+
+    def task_deleted(self, results):
+        request, response = results
+
+        if request:
+            return self.handle_error_success(response, request)
+
+        self.handle_error_success(response, request)
+        QTimer.singleShot(1500, self.load_tasks)
+
+    def task_delete_error(self, results):
+        request, response = results
+
+        return self.handle_error_success(response, request)

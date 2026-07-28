@@ -74,7 +74,7 @@ class TaskCrud:
             self.parent.close_db_connection()
             return True, str(e)
 
-    def delete_task(self, task_id: str) -> bool:
+    def delete_task(self, task_id: str) -> Tuple[bool, str]:
         if not task_id or task_id.strip() == "":
             return True, "Task ID Cannot Be Empty"
 

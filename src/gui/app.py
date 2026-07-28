@@ -157,6 +157,44 @@ class Momentum(FluentWindow):
                     color: {self.color_theme['text_secondary']};
                     outline: none;
                 }}
+
+                QWidget#task-card {{
+                    background-color: transparent;
+                    border: 1px solid {
+                        self.color_theme['accent']
+                    };
+                    border-radius: 8px;
+                }}
+
+                QLabel#card-title {{
+                    font-weight: bold;
+                    font-style: italic;
+                    font-size: 14px;
+                    color: {self.color_theme['text_primary']};
+                    letter-spacing: 0.1em;
+                    word-spacing: 0.1em;
+                    margin-top: 6px;
+                }}
+
+                QLabel#card-details {{
+                    font-style: italic;
+                    font-size: 11px;
+                    color: {self.color_theme['text_muted']};
+                    letter-spacing: 0.1em;
+                    word-spacing: 0.1em;
+                }}
+
+                QTextEdit#card-content {{
+                    border: 2px solid {
+                        self.color_theme['text_muted']
+                    };
+                    border-radius: 4px;
+                    padding: 8px;
+                    background-color: {
+                        self.color_theme['surface']
+                    };
+                    font-size: 11px;
+                }}
             """
         )
 
