@@ -1,0 +1,117 @@
+MOMENTUM USER AGREEMENT
+
+Last Updated: 2025
+
+1. ACCEPTANCE OF TERMS
+
+By using Momentum ("the Application"), you agree to this User Agreement ("Agreement"). If you do not agree, do not use the Application.
+
+2. LOCAL-FIRST ARCHITECTURE
+
+Momentum is a local-first application. All data remains on your device.
+
+2.1 Data Storage
+
+All application data is stored in the following directory on your device:
+
+~/.meks-apps/momentum/
+
+This directory contains:
+- config.json (application configuration)
+- Database files (task data)
+- Any user-generated content
+
+2.2 No Automatic Data Transmission
+
+The Application does not transmit user data to external servers by default. No analytics, telemetry, or usage data is sent automatically.
+
+2.3 Local-Only Operation
+
+The Application functions fully without an internet connection. Core features (task management, data storage, UI) work offline.
+
+3. PERMISSIONS
+
+The Application requests the following permissions:
+
+3.1 Read/Write File System Access
+
+Required to create and manage the application directory (~/.meks-apps/momentum/) and its contents. This permission is mandatory for the Application to function.
+
+3.2 Browser Access
+
+Required to open external links (support pages, documentation, GitHub repository) in your default web browser. This permission is only used when you click a link that opens an external page.
+
+4. OPTIONAL NETWORK FEATURES
+
+The following features require explicit user consent before activation:
+
+4.1 Password Reset Email
+
+If you enable password recovery, the Application will send a reset link to your registered email address. This feature:
+- Is disabled by default
+- Requires your explicit opt-in
+- Only transmits the reset token to your email address
+- Does not transmit any other user data
+
+4.2 Update Checks
+
+The Application may check for updates from the GitHub repository (https://github.com/mekasu0124/momentum). This feature:
+- Is optional
+- Only transmits the current version number
+- Does not transmit user data
+
+5. DATA OWNERSHIP
+
+You own all data you create in Momentum. The developer does not claim ownership of your data.
+
+6. DATA PORTABILITY
+
+You can export your data at any time. The Application uses open formats (SQLite, JSON) for data storage.
+
+7. DATA DELETION
+
+You can delete all application data by removing the directory:
+
+~/.meks-apps/momentum/
+
+This action is irreversible.
+
+8. SECURITY
+
+8.1 Local Encryption
+
+Sensitive data (passwords) are hashed using industry-standard algorithms before storage.
+
+8.2 No Backdoors
+
+The Application contains no backdoors, remote access tools, or hidden data collection mechanisms.
+
+8.3 Open Source
+
+The source code is available at https://github.com/mekasu0124/momentum for security review.
+
+9. NO WARRANTY
+
+The Application is provided "as is" without warranty of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, and non-infringement.
+
+10. LIMITATION OF LIABILITY
+
+In no event shall the developer be liable for any direct, indirect, incidental, special, or consequential damages arising from the use or inability to use the Application.
+
+11. CONTACT
+
+For questions about this Agreement, contact:
+
+Email: mek0124@proton.me
+GitHub: https://github.com/mekasu0124
+Username: mekasu0124
+
+12. CHANGES TO THIS AGREEMENT
+
+This Agreement may be updated. Continued use of the Application after changes constitutes acceptance of the new terms.
+
+13. GOVERNING LAW
+
+This Agreement is governed by the laws of the jurisdiction where the developer resides, without regard to conflict of law principles.
+
+BY USING MOMENTUM, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO THIS USER AGREEMENT.

@@ -2,5 +2,6 @@ from pathlib import Path
 
 
 class Config:
-    APP_DIR = Path("~/.meks-apps/momentum").expanduser()
-    ICON_PATH = Path("./src/assets/icon.png").expanduser()
+    APP_DIR = Path.home() / ".meks-apps/momentum"
+    PROJECT_DIR = Path(__file__).parent.parent
+    ICON_PATH = Path(__file__).parent / "assets/app-icon.png"

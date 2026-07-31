@@ -1,13 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-
+from sqlalchemy.orm import sessionmaker, scoped_session
 from ...config import Config
 
-app_dir = Config.APP_DIR
-db_path = app_dir / "main.db"
-
-SQL_DB_URL = f"sqlite:///{db_path}"
+SQL_DB_URL = f"sqlite:///{Config.APP_DIR}/main.db"
 
 connect_args = {}
 if SQL_DB_URL.startswith('sqlite'):
@@ -21,10 +17,12 @@ engine = create_engine(
     connect_args=connect_args
 )
 
-SessionLocal = sessionmaker(
-    bind=engine,
-    autocommit=False,
-    autoflush=False
+SessionLocal = scoped_session(
+    sessionmaker(
+        bind=engine,
+        autocommit=False,
+        autoflush=False
+    )
 )
 
 
@@ -36,9 +34,6 @@ def get_engine():
     return engine
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+def get_session():
+    """Return a new thread-local session."""
+    return SessionLocal()

@@ -1,0 +1,206 @@
+MOMENTUM TERMS OF SERVICE
+
+Last Updated: 2025
+
+1. DEFINITIONS
+
+"Application" refers to Momentum, the task management software.
+"Developer" refers to mekasu0124 (GitHub: https://github.com/mekasu0124).
+"User" refers to any person who downloads, installs, or uses the Application.
+"Data" refers to all information created, stored, or processed by the User within the Application.
+"Local Storage" refers to the directory ~/.meks-apps/momentum/ on the User's device.
+
+2. LICENSE GRANT
+
+2.1 Permission to Use
+
+The Developer grants the User a non-exclusive, non-transferable, revocable license to:
+- Download and install the Application on devices owned or controlled by the User
+- Use the Application for personal or commercial purposes
+- Create, store, and manage Data using the Application
+
+2.2 Open Source Components
+
+The Application includes third-party open source software. Each component retains its original license. See the project repository for the complete list of dependencies and their licenses.
+
+2.3 Source Code Access
+
+The Application source code is available at https://github.com/mekasu0124/momentum under the MIT License.
+
+3. USER RESPONSIBILITIES
+
+3.1 Local Data Management
+
+The User is solely responsible for:
+- Backing up Data stored in Local Storage
+- Maintaining the security of their device
+- Managing file system permissions for the Application directory
+
+3.2 Compliance
+
+The User agrees to use the Application in compliance with all applicable laws and regulations.
+
+3.3 No Reverse Engineering Restriction
+
+The User may inspect, modify, and distribute the Application source code per the MIT License terms.
+
+4. PRIVACY AND DATA PROTECTION
+
+4.1 No Data Collection
+
+The Developer does not collect, store, process, or transmit any User Data. All Data remains in Local Storage on the User's device.
+
+4.2 No Analytics
+
+The Application does not include analytics, telemetry, crash reporting, or usage tracking software.
+
+4.3 No Third-Party Data Sharing
+
+The Developer does not share User Data with third parties because no User Data is transmitted to the Developer.
+
+4.4 Local Processing Only
+
+All data processing occurs locally on the User's device. No cloud processing, synchronization, or backup is performed by the Application.
+
+5. PERMISSIONS
+
+5.1 File System Access
+
+The Application requires read/write access to create and manage Local Storage. This permission is mandatory for Application operation.
+
+5.2 Network Access
+
+The Application does not require network access for core functionality. Network access is only used for:
+- Opening external links in the User's browser (user-initiated)
+- Optional update checks (user-enabled)
+- Optional password reset emails (user-enabled, explicit consent required)
+
+5.3 Browser Integration
+
+The Application may open the User's default web browser to display:
+- Support documentation
+- GitHub repository (https://github.com/mekasu0124/momentum)
+- Issue tracker
+- External resources linked from within the Application
+
+This action only occurs when the User clicks a link.
+
+6. OPTIONAL FEATURES REQUIRING CONSENT
+
+6.1 Email-Based Password Recovery
+
+If the User enables this feature:
+- The Application sends a password reset link to the User's registered email
+- Only the reset token is transmitted
+- No other User Data is included in the email
+- The User can disable this feature at any time
+
+6.2 Update Notifications
+
+If the User enables update checks:
+- The Application queries the GitHub repository for the latest release version
+- Only the current version number is transmitted
+- No User Data or identifiers are transmitted
+
+7. INTELLECTUAL PROPERTY
+
+7.1 Application Code
+
+The Application source code is licensed under the MIT License. See the repository for full license text.
+
+7.2 User Data
+
+The User retains all intellectual property rights to their Data. The Developer claims no ownership rights over User Data.
+
+7.3 Trademarks
+
+"Momentum" and the associated logo are trademarks of the Developer. The User may not use these marks to imply endorsement or affiliation without permission.
+
+8. DISCLAIMER OF WARRANTIES
+
+THE APPLICATION IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO:
+- WARRANTIES OF MERCHANTABILITY
+- WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE
+- WARRANTIES OF NON-INFRINGEMENT
+- WARRANTIES OF TITLE
+- WARRANTIES THAT THE APPLICATION WILL BE UNINTERRUPTED OR ERROR-FREE
+- WARRANTIES THAT DEFECTS WILL BE CORRECTED
+
+9. LIMITATION OF LIABILITY
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE DEVELOPER SHALL NOT BE LIABLE FOR:
+- ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES
+- LOSS OF DATA, LOSS OF PROFITS, OR BUSINESS INTERRUPTION
+- DAMAGES RESULTING FROM UNAUTHORIZED ACCESS TO OR ALTERATION OF USER DATA
+- DAMAGES RESULTING FROM THE USER'S FAILURE TO BACK UP DATA
+
+THIS LIMITATION APPLIES REGARDLESS OF THE LEGAL THEORY (CONTRACT, TORT, NEGLIGENCE, OR OTHERWISE) EVEN IF THE DEVELOPER HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+10. INDEMNIFICATION
+
+The User agrees to indemnify and hold harmless the Developer from any claims, damages, losses, or expenses (including reasonable attorney fees) arising from:
+- The User's use of the Application
+- The User's violation of these Terms
+- The User's violation of any rights of a third party
+
+11. TERMINATION
+
+11.1 By User
+
+The User may terminate this agreement at any time by:
+- Uninstalling the Application
+- Deleting the Local Storage directory (~/.meks-apps/momentum/)
+
+11.2 By Developer
+
+The Developer may terminate this agreement if the User violates these Terms. Termination does not affect the User's rights under the MIT License for the source code.
+
+11.3 Effect of Termination
+
+Upon termination:
+- The license to use the Application ends
+- The User retains ownership of their Data
+- The User may continue to access their Data directly from Local Storage
+
+12. UPDATES AND MODIFICATIONS
+
+12.1 Application Updates
+
+The Developer may release updates. The User is not obligated to install updates.
+
+12.2 Terms Updates
+
+The Developer may modify these Terms. Updated Terms will be available in the Application and at the repository. Continued use after changes constitutes acceptance.
+
+13. GENERAL PROVISIONS
+
+13.1 Severability
+
+If any provision is found unenforceable, the remaining provisions remain in effect.
+
+13.2 Waiver
+
+Failure to enforce any provision does not constitute a waiver of that provision.
+
+13.3 Assignment
+
+The User may not assign or transfer these Terms. The Developer may assign these Terms.
+
+13.4 Entire Agreement
+
+These Terms, together with the User Agreement (ua.txt) and the MIT License, constitute the entire agreement between the User and the Developer.
+
+14. CONTACT INFORMATION
+
+Developer: mekasu0124
+Email: mek0124@proton.me
+GitHub: https://github.com/mekasu0124
+Repository: https://github.com/mekasu0124/momentum
+
+No company or organization is associated with this Application. The Developer is an individual.
+
+15. GOVERNING LAW AND DISPUTE RESOLUTION
+
+These Terms are governed by the laws of the Developer's jurisdiction. Disputes shall be resolved through good-faith negotiation. If negotiation fails, either party may seek resolution in the appropriate court of the Developer's jurisdiction.
+
+BY DOWNLOADING, INSTALLING, OR USING MOMENTUM, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THESE TERMS OF SERVICE.

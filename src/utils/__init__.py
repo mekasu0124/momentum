@@ -1,10 +1,10 @@
 from .async_helper import AsyncHelper
 from .async_worker import AsyncWorker
-from .color_theme import COLOR_THEME
+from .app_manager import ApplicationManager
 
 
 __all__ = [
     "AsyncHelper",
     "AsyncWorker",
-    "COLOR_THEME"
+    "ApplicationManager"
 ]

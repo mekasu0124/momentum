@@ -4,7 +4,7 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
-    QStatusBar,
+    QStatusBar
 )
 from PySide6.QtCore import Qt, QTimer
 
@@ -25,11 +25,3 @@ class Dashboard(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(10, 10, 10, 10)
         layout.setSpacing(0)
-
-        title = QLabel("Dashboard")
-        title.setObjectName("page-title")
-        title.setAlignment(Qt.AlignmentFlag.AlignLeft)
-
-        layout.addWidget(title)
-
-        layout.addWidget(self.status_bar)
