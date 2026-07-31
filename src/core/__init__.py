@@ -1,3 +1,6 @@
 from .logic import Logic
 
-__all__ = ["Logic"]
+
+__all__ = [
+    "Logic"
+]
