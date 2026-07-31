@@ -1,97 +1,73 @@
-from pathlib import Path;
+from pathlib import Path
 
-import json
-import os
-
-from .database.db import get_engine, get_base, get_db
+from .database.db import get_engine, get_base
+from .logic_parts.config import ConfigLogic
 from .models.task import Task
-from .crud.task import TaskCrud
+from .models.task_graveyard import TaskGraveyard
+from .models.user import User
 
 
 class Logic:
-    def __init__(self, app_dir):
-        self.app_dir = Path(app_dir)
-        self.config_file = self.app_dir / "config.json"
-        self.db = None
-        self.task_crud = TaskCrud(self)
+    def __init__(self, app_dir: Path = None, project_dir: Path = None, async_helper = None):
+        if not app_dir:
+            raise ValueError("Application Directory Cannot Be Empty!")
 
-    def check_agreement(self) -> bool:
+        if not project_dir:
+            raise ValueError("Project Directory for Application Project Cannot Be Empty!")
+
+        if not async_helper:
+            raise ValueError("This application is 100% asynchronous and must have an async_helper (AsyncHelper)")
+        
+        self.app_dir = app_dir
+        self.project_dir = project_dir
+        self.async_helper = async_helper
+        self.config_logic = ConfigLogic(self)
+
+    def get_tos_text(self) -> str:
+        tos_path = self.project_dir / "tos.txt"
+
+        if not tos_path.exists():
+            return "Invalid TOS Path"
+
         try:
-            with open(self.config_file, 'r', encoding="utf-8-sig") as f:
-                data = json.load(f)
-
-            return data["read_write"] == 1
+            with open(tos_path, 'r') as tos_file:
+                tos_text = tos_file.read()
 
         except FileNotFoundError:
-            return False
+            return "TOS File Not Found"
 
-        except (KeyError, json.JSONDecodeError):
-            return False
+        except PermissionError:
+            return "No Permission To Read TOS File"
 
         except Exception as e:
-            print(f"Unknown Exception Reading Config File:\n{e}")
-            return False
+            print(f'Unknown Exception Reading TOS File:\n{e}')
+            return str(e)
 
-    def update_user_agreement(self) -> bool:
-        if not self.app_dir.exists():
-            self.app_dir.mkdir(parents=True, exist_ok=True)
-            
+        else:
+            return tos_text
+
+    def get_ua_text(self) -> str:
+        ua_path = self.project_dir / "ua.txt"
+
+        if not ua_path.exists():
+            return "Invalid UA Path"
+
         try:
-            with open(self.config_file, 'r', encoding="utf-8-sig") as f:
-                data = json.load(f)
-
-            data["read_write"] = 1
-
-            with open(self.config_file, 'w+', encoding="utf-8-sig") as u:
-                json.dump(data, u, indent=2)
-
-            self.init_db()
-            return True
+            with open(ua_path, 'r') as ua_file:
+                ua_text = ua_file.read()
 
         except FileNotFoundError:
-            try:
-                with open(self.config_file, 'w+', encoding="utf-8-sig") as n:
-                    json.dump({"read_write": 1}, n, indent=2)
+            return "UA File Not Found"
 
-                self.init_db()
-
-                return True
-
-            except Exception as e:
-                print(f"Unknown Exception Creating Config File:\n{e}")
-                return False
-
-        except (KeyError, json.JSONDecodeError):
-            if self.config_file.exists():
-                print("Invalid/Corrupt Config File. Deleteing....")
-                os.remove(self.config_file)
-
-            try:
-                with open(self.config_file, 'w+', encoding="utf-8-sig") as n:
-                    json.dump({"read_write": 1}, n, indent=2)
-
-                self.init_db()
-
-                return True
-
-            except Exception as e:
-                print(f"Unknown Exception Creating Config File:\n{e}")
-                return False
+        except PermissionError:
+            return "No Permission To Read UA File"
 
         except Exception as e:
-            print(f"Unknown Exception Updating Config File:\n{e}")
-            return False
+            print(f'Unknown Exception Reading UA File:\n{e}')
+            return str(e)
+
+        else:
+            return ua_text
 
     def init_db(self):
         get_base().metadata.create_all(bind=get_engine())
-
-    def get_db_connection(self):
-        if self.db is None:
-            self.db = next(get_db())
-
-        return self.db
-
-    def close_db_connection(self):
-        if self.db:
-            self.db.close()
-            self.db = None
