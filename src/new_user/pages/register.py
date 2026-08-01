@@ -335,25 +335,11 @@ class Register(QWidget):
         create_pw = self.create_pw_edit.text().strip()
         confirm_pw = self.confirm_pw_edit.text().strip()
 
-        if not all([email, username, create_pw, confirm_pw]):
-            return self.handle_error_success("All Inputs Are Required!", True)
-
-        if not email:
-            return self.handle_error_success("Email is Required to Reset Password if Forgotten", True)
-
-        if not username:
-            return self.handle_error_success("Username is Required for Account Allocation and Task Association", True)
-
-        if not create_pw or not confirm_pw:
-            return self.handle_error_success("Invalid Password(s)", True)
-
-        if create_pw != confirm_pw:
-            return self.handle_error_success("Passwords Do Not Match", True)
-
         self.user_dict = {
             "email": email,
             "username": username,
-            "password": confirm_pw
+            "cr_password": create_pw,
+            "cf_password": confirm_pw
         }
 
         worker = self.async_helper.run_async(
