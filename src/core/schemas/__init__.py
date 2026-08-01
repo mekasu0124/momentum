@@ -4,7 +4,7 @@ from .user import UserCreate, UserUpdate, UserResponse
 
 
 __all__ = [
-    "TaskGraveyardCreate", "TaskGraveyardResponse", "TaskGraveyardRestore"
-    "TaskCreate", "TaskUpdate", "TaskResponse"
+    "TaskGraveyardCreate", "TaskGraveyardResponse", "TaskGraveyardRestore",
+    "TaskCreate", "TaskUpdate", "TaskResponse",
     "UserCreate", "UserUpdate", "UserResponse"
 ]
