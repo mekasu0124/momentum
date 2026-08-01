@@ -26,21 +26,21 @@ class User(Base):
         default=lambda: uuid4()
     )
 
-    email_address = Column(
-        String,
+    email = Column(
+        String(255),
         index=True,
         unique=True,
         nullable=False
     )
 
     username = Column(
-        String,
+        String(50),
         index=True,
         unique=True,
         nullable=False
     )
 
-    hashed_password = Column(String)
+    hashed_password = Column(String(255), nullable=False)
 
     created_at = Column(
         DateTime,
