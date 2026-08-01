@@ -40,14 +40,28 @@ Table of Contents:
   - created `src/core/database/db.py` with SQLAlchemy setup
     - SQLite connection with `~/.meks-apps/momentum/main.db`
     - scoped session factory for thread safety
-  - created models directory
-    - `User` model (schema only)
-    - `Task` model (schema only)
-    - `TaskGraveyard` model (schema only)
-  - created schemas directory
-    - `UserCreate`, `UserUpdate`, `UserResponse`
-    - `TaskCreate`, `TaskUpdate`, `TaskResponse`
-    - `TaskGraveyardCreate`, `TaskGraveyardResponse`, `TaskGraveyardRestore`
+  - created models directory with full implementations
+    - `User` model with UUID primary key, email, username, hashed_password, timestamps
+    - `Task` model with UUID primary key, user_id FK, title, content, timestamps
+    - `TaskGraveyard` model with UUID primary key, user_id FK, title, content, timestamps
+    - established relationships: One User => Many Tasks, One User => Many Graveyard Tasks
+  - created schemas directory with full implementations
+    - `UserCreate` with email, username, cr_password, cf_password fields and password match validation
+    - `UserUpdate` with optional fields for partial updates
+    - `UserResponse` with UUID, email, username, timestamps
+    - `TaskCreate` with user_id, title, content
+    - `TaskUpdate` with optional title, content
+    - `TaskResponse` with UUID, user_id, title, content, timestamps
+    - `TaskGraveyardCreate` with user_id, title, content
+    - `TaskGraveyardResponse` with UUID, user_id, title, content, timestamps
+    - `TaskGraveyardRestore` for restoring tasks from graveyard
+- implemented `UserLogic` class in `src/core/logic_parts/user_logic.py`
+  - `create_user()` with argon2 password hashing
+  - validates email, username (3-50 chars), password (8+ chars)
+  - checks for existing username/email before creating
+  - returns `(bool, Optional[UserResponse], str)` tuple
+  - `verify_password()` for login authentication
+  - `get_user_by_email()` and `get_user_by_id()` for retrieval
 - implemented `AsyncHelper` and `AsyncWorker` utilities
   - background threading with `QThreadPool`
   - signals for started, finished, error, progress
@@ -65,6 +79,7 @@ Table of Contents:
   - status bar messages for loading and error states
   - async loading of TOS/UA text files
   - checkbox validation before proceeding
+  - registration form passes dict with email, username, cr_password, cf_password to UserLogic
 - implemented login window structure
   - `LoginWindow` with `Dashboard` page
   - `new_user_requested` and `login_success` signals
@@ -92,5 +107,34 @@ Table of Contents:
   - checks user agreement status
   - routes to new_user or login flow
 - updated `src/__init__.py` exports
+- added `UserLogic` to `Logic` class initialization
+- updated `src/core/schemas/__init__.py` exports with proper commas
+- added `.python-version` file (Python 3.14)
+
+### 31st
+- reviewed and validated argon2 password hashing implementation
+  - confirmed `ph.hash()` correctly creates hashes
+  - removed redundant `ph.verify()` during user creation
+  - kept `ph.verify()` for login authentication only
+- updated models with foreign key relationships
+  - added `user_id` ForeignKey to `Task` and `TaskGraveyard` models
+  - added `ondelete="CASCADE"` for automatic cleanup
+  - added `relationship()` with `back_populates` for bidirectional navigation
+  - fixed inconsistent naming: `update_at` → `updated_at` across all models
+- updated schemas to match client data structure
+  - changed `UserCreate` schema to accept `email`, `username`, `cr_password`, `cf_password`
+  - added `@model_validator` to validate passwords match
+  - updated `UserResponse` schema with `email` field
+  - updated `TaskCreate` and `TaskGraveyardCreate` with `user_id` field
+  - fixed missing commas in `__all__` exports
+- updated `UserLogic.create_user()` method
+  - changed parameter from `UserCreate` schema to `Dict[str, Any]` to match client
+  - added comprehensive validation for all fields
+  - added username length validation (3-50 chars)
+  - added password length validation (8+ chars)
+  - added check for existing username or email
+  - properly stores hashed password in database
+  - returns `UserResponse` with UUID, email, username, timestamps
+- updated CHANGELOG with all work from today
 
 [Top](#top)
