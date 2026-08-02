@@ -56,7 +56,7 @@ class UserLogic:
             return False, None, "Passwords Do Not Match"
 
         try:
-            valid_email = validate_email(email).normalized
+            valid_email = validate_email(email, check_deliverability=False).normalized
         except EmailNotValidError:
             return False, None, "Invalid Email Address"
 
@@ -82,7 +82,7 @@ class UserLogic:
             hashed_password = ph.hash(create_pw)
 
             new_user = User(
-                email=email,
+                email=valid_email,
                 username=username,
                 hashed_password=hashed_password
             )
