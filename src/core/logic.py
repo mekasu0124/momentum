@@ -2,6 +2,7 @@ from pathlib import Path
 
 from .database.db import get_engine, get_base
 from .logic_parts.config import ConfigLogic
+from .logic_parts.user_logic import UserLogic
 from .models.task import Task
 from .models.task_graveyard import TaskGraveyard
 from .models.user import User
@@ -22,6 +23,7 @@ class Logic:
         self.project_dir = project_dir
         self.async_helper = async_helper
         self.config_logic = ConfigLogic(self)
+        self.user_logic = UserLogic(self)
 
     def get_tos_text(self) -> str:
         tos_path = self.project_dir / "tos.txt"
