@@ -7,6 +7,8 @@ Table of Contents:
   - [July](#july)
     - [30th](#30th)
     - [31st](#31st)
+  - [August](#august)
+    - [2nd](#2nd)
 
 ---
 
@@ -136,5 +138,13 @@ Table of Contents:
   - properly stores hashed password in database
   - returns `UserResponse` with UUID, email, username, timestamps
 - updated CHANGELOG with all work from today
+
+
+## August
+
+### 2nd
+- corrected src/core/logic_parts/user_logic.py - create_user parameter to expect a Dict[str, str] instead of a UserCreate pydantic model. 
+- updated create_user functionality to handle converting incoming user dict to a UserCreate pydantic model with validation error response statement.
+- updated create_user functionality to handle validating incoming user email and returning either the normalized validated email or an EmailNotValidError back to the user.
 
 [Top](#top)
