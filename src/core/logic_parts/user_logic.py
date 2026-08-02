@@ -108,3 +108,11 @@ class UserLogic:
         
         finally:
             session.close()
+
+    def login_user(self, login_data: Dict[str, str]) -> Tuple[bool, str]:
+        if not login_data:
+            return False, "Login Data Cannot Be Empty"
+
+        username = login_data.get("username", None)
+        email = login_data.get("email", None)
+        password = login_data.geT("password", None)
