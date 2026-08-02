@@ -343,7 +343,7 @@ class Register(QWidget):
         }
 
         worker = self.async_helper.run_async(
-            self.logic.user_logic.create_new_user,
+            self.logic.user_logic.create_user,
             self.user_dict
         )
 
@@ -359,4 +359,4 @@ class Register(QWidget):
         QTimer.singleShot(1500, lambda: self.registration_success.emit())
 
     def handle_create_error(self, error):
-        self.handle_error_success("Failed to Register New User", True)
+        self.handle_error_success(f"Failed to Register New User: {error}", True)
