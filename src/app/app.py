@@ -48,5 +48,4 @@ class Momentum(FluentWindow):
         )
 
     def closeEvent(self, event):
-        self.logic.close_db_connection()
         event.accept()
