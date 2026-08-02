@@ -9,8 +9,7 @@ from PySide6.QtCore import Signal, QTimer
 from PySide6.QtWidgets import QGraphicsOpacityEffect
 
 from .pages.welcome import Welcome
-from .pages.tos import TOS
-from .pages.ua import UA
+from .pages.agreements import Agreements
 from .pages.register import Register
 
 
@@ -31,13 +30,11 @@ class NewUser(FluentWindow):
         self.is_animating = False
 
         self.welcome = Welcome(self)
-        self.tos = TOS(self)
-        self.ua = UA(self)
+        self.agreements = Agreements(self)
         self.register = Register(self)
 
         self.pages.append(self.welcome)
-        self.pages.append(self.tos)
-        self.pages.append(self.ua)
+        self.pages.append(self.agreements)
         self.pages.append(self.register)
 
         self.welcome.launch_user_login.connect(
@@ -47,18 +44,10 @@ class NewUser(FluentWindow):
             self.next_page
         )
 
-        self.tos.prev_page_signal.connect(
+        self.agreements.prev_page_signal.connect(
             self.prev_page
         )
-        self.tos.next_page_signal.connect(
-            self.next_page
-        )
-
-        self.ua.prev_page_signal.connect(
-            self.prev_page
-        )
-
-        self.ua.next_page_signal.connect(
+        self.agreements.next_page_signal.connect(
             self.next_page
         )
 
@@ -84,23 +73,14 @@ class NewUser(FluentWindow):
         )
         self.navigation_interfaces.append(welcome_interface)
 
-        tos_interface = self.addSubInterface(
-            self.tos,
+        agreements_interface = self.addSubInterface(
+            self.agreements,
             fi.DOCUMENT.icon(
                 color=self.color_theme['accent']
             ),
-            "TOS"
+            "Agreements"
         )
-        self.navigation_interfaces.append(tos_interface)
-
-        ua_interface = self.addSubInterface(
-            self.ua,
-            fi.CONSTRACT.icon(
-                color=self.color_theme['accent']
-            ),
-            "UA"
-        )
-        self.navigation_interfaces.append(ua_interface)
+        self.navigation_interfaces.append(agreements_interface)
 
         register_interface = self.addSubInterface(
             self.register,
