@@ -11,6 +11,14 @@ from PySide6.QtCore import Qt, Signal
 
 import sys
 
+"""
+TODO - rename welcome.py to page_one.py
+TODO - move read/write and browser agreement check to page_two.py
+TODO - move tos and ua file text to static html files
+TODO - move toa and ua agreement to page_two.py
+TODO - update logic on backend
+"""
+
 
 class Welcome(QWidget):
     launch_user_login = Signal()
