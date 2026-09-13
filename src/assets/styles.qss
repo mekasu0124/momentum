@@ -1,0 +1,41 @@
+/*
+:root {
+  --background: #1a0022;
+  --surface: #330044;
+  --surface-elevated: #4a0066;
+  --surface-light: #660088;
+  --accent: #e600ff;
+  --accent-hover: #ff33ff;
+  --primary-dim: #9900cc;
+  --text-primary: #ffffff;
+  --text-secondary: #b300dd;
+  --text-muted: #8000aa;
+  --success: #00cc66;
+  --warning: #ffaa00;
+  --error: #ff4444;
+  --info: #e600ff;
+  --shadow-light: rgba(255, 255, 255, 0.05);
+  --shadow-dark: rgba(0, 0, 0, 0.75);
+  --primary: #e600ff;
+  --primary-light: #ff33ff;
+  --primary-dark: #9900cc;
+}
+*/
+
+QWidget {
+  background-color: #1a0022;
+}
+
+QLabel#page-title {
+  color: #e600ff;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  word-spacing: 0.1em;
+}
+
+QWidget#wrapper {
+  border: none;
+  background-color: transparent;
+}
